@@ -85,6 +85,11 @@ if thing_holder.count_red() == 5:
 if line == "DROPREDEND":
     ser.write(b"RESET\n")
 
+#Capisci la serialcomunication il rasberry deve saper scrivere e leggere la seriale
+#Capisci come funziona il sensore di colore del rasberry
+#Rimetti a posto con send_command
+
+
 
 
 
