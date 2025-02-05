@@ -3,7 +3,7 @@ from camera import read_from_camera
 from SerialBusRaspberry_send_and_receive import send_command, ser
 from camera import cv2
 
-
+tonno = "tonni"
 
 officina = "Undefined"
 
@@ -84,6 +84,11 @@ if thing_holder.count_red() == 5:
     ser.write(b"DROPRED\n")
 if line == "DROPREDEND":
     ser.write(b"RESET\n")
+
+#Capisci la serialcomunication il rasberry deve saper scrivere e leggere la seriale
+#Capisci come funziona il sensore di colore del rasberry
+#Rimetti a posto con send_command
+
 
 
 
