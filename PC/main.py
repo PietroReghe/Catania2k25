@@ -46,12 +46,14 @@ if line == "START END" :
     thing = read_from_camera()
     if thing == "YELLOWCAR":
         officina == "YELLOW"
-        cv2.destroyAllWindows() #modifica per rasberry       
+        cv2.destroyAllWindows() #modifica per rasberry 
+        send_command(ALLIGNE_COMMAND)       
     else:
          if thing == "GREENCAR":
             officina == "GREEN"
             cv2.destroyAllWindows()                     
-send_command(ALLIGNE_COMMAND)
+            send_command(ALLIGNE_COMMAND)
+
 
 if line == "ALLIGNEND":
     thing = read_from_camera()
