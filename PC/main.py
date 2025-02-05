@@ -51,7 +51,7 @@ if line == "START END" :
          if thing == "GREENCAR":
             officina == "GREEN"
             cv2.destroyAllWindows()                     
-ser.write(ALLIGNE_COMMAND)
+send_command(ALLIGNE_COMMAND)
 
 if line == "ALLIGNEND":
     thing = read_from_camera()
