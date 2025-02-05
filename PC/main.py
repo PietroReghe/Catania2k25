@@ -3,7 +3,7 @@ from camera import read_from_camera
 from SerialBusRaspberry_send_and_receive import send_command, ser
 from camera import cv2
 
-tonno = "tonni"
+tonno = "tonni2"
 
 officina = "Undefined"
 
