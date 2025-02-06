@@ -1,6 +1,8 @@
-#CATANIA ROBOT 2K25
+# CATANIA ROBOT 2K25
 
+## TODO 
 
+write the readme
 
 ## Install libcamera on rasberry pi
 ```
