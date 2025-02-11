@@ -1,5 +1,5 @@
  # camera.py
-from camera import read_from_camera
+from CameraPI import read_camera_pi
 from SerialBusRaspberry_send_and_receive import send_command, ser
 from camera import cv2
 
@@ -43,7 +43,7 @@ thing_holder = Holder()
 
 ser.write(START_COMMAND)
 if line == "START END" :
-    thing = read_from_camera()
+    thing = read_camera_pi()
     if thing == "YELLOWCAR":
         officina == "YELLOW"
         cv2.destroyAllWindows() #modifica per rasberry 
@@ -56,7 +56,7 @@ if line == "START END" :
 
 
 if line == "ALLIGNEND":
-    thing = read_from_camera()
+    thing = read_camera_pi()
     
     ser.write(TRIAL_BEGIN)
     if thing == "REDCAR" and thing_holder.count_red() < 2:    
@@ -81,7 +81,7 @@ if thing_holder.count_blue() == 4 and thing_holder.count_red() == 2:
 if line == "DropBlueEnd" : 
     ser.write(ALLIGNE_2)
 if line == "ALLIGNE2END":
-    thing = read_from_camera()
+    thing = read_camera_pi()
     ser.rite(TRIAL_BEGIN)
     if thing == "REDCAR" and thing_holder.count_red() < 5:
         ser.write(STOP_COMMAND)
@@ -99,7 +99,7 @@ if line == "DROPREDEND":
 
 #Capisci la serialcomunication il rasberry deve saper scrivere e leggere la seriale
 #Capisci come funziona il sensore di colore del rasberry
-
+#Fai il count per chiudere le finestra
 
 
 
