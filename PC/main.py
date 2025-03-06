@@ -71,7 +71,7 @@ if line == "ALLIGNEND":
             ser.write(STOP_COMMAND)
             ser.write (PICK_UP)
             thing_holder.add(BLUE_CAR)
-            
+
             ser.write(TRIAL_BEGIN)
 cv2.destroyAllWindows()
 
@@ -97,7 +97,7 @@ if line == "DROPREDEND":
     
     ser.write(RESET_COMMAND)
 
-#Capisci la serialcomunication il rasberry deve saper scrivere e leggere la seriale
+
 #Capisci come funziona il sensore di colore del rasberry
 #Fai il count per chiudere le finestra
 
