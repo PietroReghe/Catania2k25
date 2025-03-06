@@ -2,6 +2,8 @@
 from CameraPI import read_camera_pi
 from SerialBusRaspberry_send_and_receive import send_command, ser
 from camera import cv2
+import time
+import serial
 
 officina = "Undefined"
 
@@ -41,61 +43,71 @@ class Holder:
 
 thing_holder = Holder()
 
-ser.write(START_COMMAND)
-if line == "START END" :
-    thing = read_camera_pi()
-    if thing == "YELLOWCAR":
-        officina == "YELLOW"
-        cv2.destroyAllWindows() #modifica per rasberry 
-        send_command(ALLIGNE_COMMAND)       
-    else:
-         if thing == "GREENCAR":
-            officina == "GREEN"
-            cv2.destroyAllWindows()                     
-            send_command(ALLIGNE_COMMAND)
+if __name__ == '__main__':
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    ser.reset_input_buffer()
+    while True:
+        
+        line = ser.readline().decode('utf-8').rstrip()
+        print("input", line, '\n')
+        time.sleep(1)
 
 
-if line == "ALLIGNEND":
-    thing = read_camera_pi()
-    
-    ser.write(TRIAL_BEGIN)
-    if thing == "REDCAR" and thing_holder.count_red() < 2:    
-        ser.write(STOP_COMMAND)
-        ser.write (PICK_UP)
-        thing_holder.add(RED_CAR)
-        ser.write(ALLIGNE_COMMAND)
+        ser.write(START_COMMAND)
+        if line == "START END" :
+            thing = read_camera_pi()
+            if thing == "YELLOWCAR":
+                officina == "YELLOW"
+                cv2.destroyAllWindows() #modifica per rasberry 
+                send_command(ALLIGNE_COMMAND)       
+            else:
+                if thing == "GREENCAR":
+                    officina == "GREEN"
+                    cv2.destroyAllWindows()                     
+                    send_command(ALLIGNE_COMMAND)
 
-    else :
 
-        if thing == "BLUECAR" and thing_holder.count_blue() < 4:
-            ser.write(STOP_COMMAND)
-            ser.write (PICK_UP)
-            thing_holder.add(BLUE_CAR)
-
+        if line == "ALLIGNEND":
+            thing = read_camera_pi()
+            
             ser.write(TRIAL_BEGIN)
-cv2.destroyAllWindows()
+            if thing == "REDCAR" and thing_holder.count_red() < 2:    
+                ser.write(STOP_COMMAND)
+                ser.write (PICK_UP)
+                thing_holder.add(RED_CAR)
+                ser.write(ALLIGNE_COMMAND)
 
-if thing_holder.count_blue() == 4 and thing_holder.count_red() == 2:
-    
-    ser.write(DROP_BLUE)
-if line == "DropBlueEnd" : 
-    ser.write(ALLIGNE_2)
-if line == "ALLIGNE2END":
-    thing = read_camera_pi()
-    ser.rite(TRIAL_BEGIN)
-    if thing == "REDCAR" and thing_holder.count_red() < 5:
-        ser.write(STOP_COMMAND)
-        ser.write (PICK_UP)
-        thing_holder.add(RED_CAR)
-        ser.write(TRIAL_BEGIN)
-cv2.destroyAllWindows()
+            else :
 
-if thing_holder.count_red() == 5:
-    
-    ser.write(DROP_RED)
-if line == "DROPREDEND":
-    
-    ser.write(RESET_COMMAND)
+                if thing == "BLUECAR" and thing_holder.count_blue() < 4:
+                    ser.write(STOP_COMMAND)
+                    ser.write (PICK_UP)
+                    thing_holder.add(BLUE_CAR)
+
+                    ser.write(TRIAL_BEGIN)
+        cv2.destroyAllWindows()
+
+        if thing_holder.count_blue() == 4 and thing_holder.count_red() == 2:
+            
+            ser.write(DROP_BLUE)
+        if line == "DropBlueEnd" : 
+            ser.write(ALLIGNE_2)
+        if line == "ALLIGNE2END":
+            thing = read_camera_pi()
+            ser.rite(TRIAL_BEGIN)
+            if thing == "REDCAR" and thing_holder.count_red() < 5:
+                ser.write(STOP_COMMAND)
+                ser.write (PICK_UP)
+                thing_holder.add(RED_CAR)
+                ser.write(TRIAL_BEGIN)
+        cv2.destroyAllWindows()
+
+        if thing_holder.count_red() == 5:
+            
+            ser.write(DROP_RED)
+        if line == "DROPREDEND":
+            
+            ser.write(RESET_COMMAND)
 
 
 #Capisci come funziona il sensore di colore del rasberry
