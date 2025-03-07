@@ -20,7 +20,7 @@ DROP_RED = b"DROPRED\n"
 RESET_COMMAND = b"RESET\n"
 
 line = send_command(START_COMMAND)
-ser.write("brusi gay")
+
 class Holder: 
     seats = []
     def add(self, thing:str)->int:
