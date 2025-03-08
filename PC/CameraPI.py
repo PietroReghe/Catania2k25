@@ -8,10 +8,6 @@ import numpy as np
 import cv2 
 
 
-
-
-
-
 def read_camera_pi():
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
