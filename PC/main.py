@@ -23,27 +23,27 @@ RESET_COMMAND = b"RESET\n"
 
 line = send_command(START_COMMAND)
 
-class Holder: 
+class CarHolder:  
     seats = []
-    def add(self, thing:str)->int:
-        self.seats.append(thing)
+
+    def add(self, car: str) -> int:
+        self.seats.append(car)
         return len(self.seats)
-    
-    def remove(self, position:int)->str:
-        thing=self.seats[position]
+
+    def remove(self, position: int) -> str:
+        car = self.seats[position]
         self.seats.pop(position)
-        return thing
-    
-    def count_blue(self)->int:
+        return car
 
-        return len(list(filter(lambda t:t== BLUE_CAR , self.seats)))
-    
-    def count_red(self)->int:
+    def count_blue(self) -> int:
+        return len(list(filter(lambda t: t == BLUE_CAR, self.seats)))
 
-        return len(list(filter(lambda t:t== RED_CAR , self.seats)))
+    def count_red(self) -> int:
+        return len(list(filter(lambda t: t == RED_CAR, self.seats)))
 
 
-thing_holder = Holder()
+car_holder = CarHolder()  
+
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
@@ -73,38 +73,37 @@ if __name__ == '__main__':
             car_color = read_camera_pi()
             
             ser.write(TRIAL_BEGIN)
-            if car_color == "REDCAR" and thing_holder.count_red() < 2:    
+            if car_color == "REDCAR" and car_holder.count_red() < 2:    
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
-                thing_holder.add(RED_CAR)
+                car_holder.add(RED_CAR)
                 ser.write(ALLIGNE_COMMAND)
 
             else :
 
-                if car_color == "BLUECAR" and thing_holder.count_blue() < 4:
+                if car_color == "BLUECAR" and car_holder.count_blue() < 4:
                     ser.write(STOP_COMMAND)
                     ser.write (PICK_UP)
-                    thing_holder.add(BLUE_CAR)
-
+                    car_holder.add(BLUE_CAR)
                     ser.write(TRIAL_BEGIN)
         cv2.destroyAllWindows()
 
-        if thing_holder.count_blue() == 4 and thing_holder.count_red() == 2:
+        if car_holder.count_blue() == 4 and car_holder.count_red() == 2:
             
             ser.write(DROP_BLUE)
         if line == "DropBlueEnd" : 
             ser.write(ALLIGNE_2)
         if line == "ALLIGNE2END":
             car_color = read_camera_pi()
-            ser.rite(TRIAL_BEGIN)
-            if car_color == "REDCAR" and thing_holder.count_red() < 5:
+            ser.write(TRIAL_BEGIN)
+            if car_color == "REDCAR" and car_holder.count_red() < 5:
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
-                thing_holder.add(RED_CAR)
+                car_holder.add(RED_CAR)
                 ser.write(TRIAL_BEGIN)
         cv2.destroyAllWindows()
 
-        if thing_holder.count_red() == 5:
+        if car_holder.count_red() == 5:
             
             ser.write(DROP_RED)
         if line == "DROPREDEND":
@@ -112,8 +111,10 @@ if __name__ == '__main__':
             ser.write(RESET_COMMAND)
 
 
-#Capisci come funziona il sensore di colore del rasberry
-#Fai il count per chiudere le finestra
+
+#e che quando il raspi dice di fermarsi lui si fermi veramnte nel punto dato
+# devi fare in modo che ogni volta che si stoppa a prendere un colore riprenda a fare il giro in modo corretto
+
 
 
 

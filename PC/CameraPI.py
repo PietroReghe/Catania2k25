@@ -3,7 +3,7 @@
 from picamera2 import Picamera2
 import numpy as np 
 import cv2 
-
+import serial
 
 def read_camera_pi():
     cap = cv2.VideoCapture(0)  # Inizializza la videocamera
