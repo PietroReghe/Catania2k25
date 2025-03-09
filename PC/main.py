@@ -23,27 +23,27 @@ RESET_COMMAND = b"RESET\n"
 
 line = send_command(START_COMMAND)
 
-class Holder: 
+class CarHolder:  # Cambio nome da Holder a CarHolder
     seats = []
-    def add(self, thing:str)->int:
-        self.seats.append(thing)
+
+    def add(self, car: str) -> int:
+        self.seats.append(car)
         return len(self.seats)
-    
-    def remove(self, position:int)->str:
-        thing=self.seats[position]
+
+    def remove(self, position: int) -> str:
+        car = self.seats[position]
         self.seats.pop(position)
-        return thing
-    
-    def count_blue(self)->int:
+        return car
 
-        return len(list(filter(lambda t:t== BLUE_CAR , self.seats)))
-    
-    def count_red(self)->int:
+    def count_blue(self) -> int:
+        return len(list(filter(lambda t: t == BLUE_CAR, self.seats)))
 
-        return len(list(filter(lambda t:t== RED_CAR , self.seats)))
+    def count_red(self) -> int:
+        return len(list(filter(lambda t: t == RED_CAR, self.seats)))
 
 
-thing_holder = Holder()
+car_holder = CarHolder()  # Cambio nome da thing_holder a car_holder
+
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
