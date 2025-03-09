@@ -23,7 +23,7 @@ RESET_COMMAND = b"RESET\n"
 
 line = send_command(START_COMMAND)
 
-class CarHolder:  # Cambio nome da Holder a CarHolder
+class CarHolder:  
     seats = []
 
     def add(self, car: str) -> int:
@@ -85,7 +85,6 @@ if __name__ == '__main__':
                     ser.write(STOP_COMMAND)
                     ser.write (PICK_UP)
                     car_holder.add(BLUE_CAR)
-
                     ser.write(TRIAL_BEGIN)
         cv2.destroyAllWindows()
 
@@ -96,7 +95,7 @@ if __name__ == '__main__':
             ser.write(ALLIGNE_2)
         if line == "ALLIGNE2END":
             car_color = read_camera_pi()
-            ser.rite(TRIAL_BEGIN)
+            ser.write(TRIAL_BEGIN)
             if car_color == "REDCAR" and car_holder.count_red() < 5:
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
@@ -112,8 +111,10 @@ if __name__ == '__main__':
             ser.write(RESET_COMMAND)
 
 
-#Capisci come funziona il sensore di colore del rasberry
-#Fai il count per chiudere le finestra
+
+#e che quando il raspi dice di fermarsi lui si fermi veramnte nel punto dato
+# devi fare in modo che ogni volta che si stoppa a prendere un colore riprenda a fare il giro in modo corretto
+
 
 
 
