@@ -42,7 +42,7 @@ class CarHolder:  # Cambio nome da Holder a CarHolder
         return len(list(filter(lambda t: t == RED_CAR, self.seats)))
 
 
-car_holder = CarHolder()  # Cambio nome da thing_holder a car_holder
+car_holder = CarHolder()  # Cambio nome da car_holder a car_holder
 
 
 if __name__ == '__main__':
@@ -73,23 +73,23 @@ if __name__ == '__main__':
             car_color = read_camera_pi()
             
             ser.write(TRIAL_BEGIN)
-            if car_color == "REDCAR" and thing_holder.count_red() < 2:    
+            if car_color == "REDCAR" and car_holder.count_red() < 2:    
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
-                thing_holder.add(RED_CAR)
+                car_holder.add(RED_CAR)
                 ser.write(ALLIGNE_COMMAND)
 
             else :
 
-                if car_color == "BLUECAR" and thing_holder.count_blue() < 4:
+                if car_color == "BLUECAR" and car_holder.count_blue() < 4:
                     ser.write(STOP_COMMAND)
                     ser.write (PICK_UP)
-                    thing_holder.add(BLUE_CAR)
+                    car_holder.add(BLUE_CAR)
 
                     ser.write(TRIAL_BEGIN)
         cv2.destroyAllWindows()
 
-        if thing_holder.count_blue() == 4 and thing_holder.count_red() == 2:
+        if car_holder.count_blue() == 4 and car_holder.count_red() == 2:
             
             ser.write(DROP_BLUE)
         if line == "DropBlueEnd" : 
@@ -97,14 +97,14 @@ if __name__ == '__main__':
         if line == "ALLIGNE2END":
             car_color = read_camera_pi()
             ser.rite(TRIAL_BEGIN)
-            if car_color == "REDCAR" and thing_holder.count_red() < 5:
+            if car_color == "REDCAR" and car_holder.count_red() < 5:
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
-                thing_holder.add(RED_CAR)
+                car_holder.add(RED_CAR)
                 ser.write(TRIAL_BEGIN)
         cv2.destroyAllWindows()
 
-        if thing_holder.count_red() == 5:
+        if car_holder.count_red() == 5:
             
             ser.write(DROP_RED)
         if line == "DROPREDEND":
