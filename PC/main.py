@@ -42,7 +42,7 @@ class CarHolder:  # Cambio nome da Holder a CarHolder
         return len(list(filter(lambda t: t == RED_CAR, self.seats)))
 
 
-car_holder = CarHolder()  # Cambio nome da car_holder a car_holder
+car_holder = CarHolder()  
 
 
 if __name__ == '__main__':
