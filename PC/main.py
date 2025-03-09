@@ -6,6 +6,8 @@ import time
 import serial
 
 
+steps = 0; range(1,18)
+
 
 officina = "Undefined"
 
@@ -20,8 +22,9 @@ DROP_BLUE = b"DropBlue\n"
 ALLIGNE_2 = b"ALLIGNE2\n"
 DROP_RED = b"DROPRED\n"
 RESET_COMMAND = b"RESET\n"
+PICKED_UP = b"PickedUp\n"
 
-line = send_command(START_COMMAND)
+
 
 class CarHolder:  
     seats = []
@@ -74,22 +77,22 @@ if __name__ == '__main__':
             
             ser.write(TRIAL_BEGIN)
             if car_color == "REDCAR" and car_holder.count_red() < 2:    
-                ser.write(STOP_COMMAND)
+                steps+1
                 ser.write (PICK_UP)
                 car_holder.add(RED_CAR)
-                ser.write(ALLIGNE_COMMAND)
+                
 
             else :
 
                 if car_color == "BLUECAR" and car_holder.count_blue() < 4:
-                    ser.write(STOP_COMMAND)
+                    steps +1
                     ser.write (PICK_UP)
                     car_holder.add(BLUE_CAR)
-                    ser.write(TRIAL_BEGIN)
+                    
         cv2.destroyAllWindows()
 
         if car_holder.count_blue() == 4 and car_holder.count_red() == 2:
-            
+            ser.write(STOP_COMMAND)
             ser.write(DROP_BLUE)
         if line == "DropBlueEnd" : 
             ser.write(ALLIGNE_2)
@@ -97,17 +100,30 @@ if __name__ == '__main__':
             car_color = read_camera_pi()
             ser.write(TRIAL_BEGIN)
             if car_color == "REDCAR" and car_holder.count_red() < 5:
-                ser.write(STOP_COMMAND)
+                
                 ser.write (PICK_UP)
                 car_holder.add(RED_CAR)
-                ser.write(TRIAL_BEGIN)
+                
         cv2.destroyAllWindows()
 
         if car_holder.count_red() == 5:
             
             ser.write(DROP_RED)
-        if line == "DROPREDEND":
+
+        if line == ("PickedUp") and steps <= 18:
+            ser.write(TRIAL_BEGIN)
+        else:
+            if steps == 8 :
+                ser.write(b"ROTATE\n")
             
+        if car_color == "YELLOWCAR":
+            steps+1
+        else:
+            if car_color == "GREENCAR":
+                steps+1
+
+         
+        if line == "DROPREDEND":
             ser.write(RESET_COMMAND)
 
 
