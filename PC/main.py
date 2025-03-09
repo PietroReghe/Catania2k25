@@ -1,9 +1,11 @@
  # camera.py
 from CameraPI import read_camera_pi
 from SerialBusRaspberry_send_and_receive import send_command, ser
-from camera import cv2
+from CameraPI import cv2
 import time
 import serial
+
+
 
 officina = "Undefined"
 
@@ -55,23 +57,23 @@ if __name__ == '__main__':
 
         ser.write(START_COMMAND)
         if line == "START END" :
-            thing = read_camera_pi()
-            if thing == "YELLOWCAR":
+            car_color = read_camera_pi()
+            if car_color == "YELLOWCAR":
                 officina == "YELLOW"
                 cv2.destroyAllWindows() #modifica per rasberry 
                 send_command(ALLIGNE_COMMAND)       
             else:
-                if thing == "GREENCAR":
+                if car_color == "GREENCAR":
                     officina == "GREEN"
                     cv2.destroyAllWindows()                     
                     send_command(ALLIGNE_COMMAND)
 
 
         if line == "ALLIGNEND":
-            thing = read_camera_pi()
+            car_color = read_camera_pi()
             
             ser.write(TRIAL_BEGIN)
-            if thing == "REDCAR" and thing_holder.count_red() < 2:    
+            if car_color == "REDCAR" and thing_holder.count_red() < 2:    
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
                 thing_holder.add(RED_CAR)
@@ -79,7 +81,7 @@ if __name__ == '__main__':
 
             else :
 
-                if thing == "BLUECAR" and thing_holder.count_blue() < 4:
+                if car_color == "BLUECAR" and thing_holder.count_blue() < 4:
                     ser.write(STOP_COMMAND)
                     ser.write (PICK_UP)
                     thing_holder.add(BLUE_CAR)
@@ -93,9 +95,9 @@ if __name__ == '__main__':
         if line == "DropBlueEnd" : 
             ser.write(ALLIGNE_2)
         if line == "ALLIGNE2END":
-            thing = read_camera_pi()
+            car_color = read_camera_pi()
             ser.rite(TRIAL_BEGIN)
-            if thing == "REDCAR" and thing_holder.count_red() < 5:
+            if car_color == "REDCAR" and thing_holder.count_red() < 5:
                 ser.write(STOP_COMMAND)
                 ser.write (PICK_UP)
                 thing_holder.add(RED_CAR)
