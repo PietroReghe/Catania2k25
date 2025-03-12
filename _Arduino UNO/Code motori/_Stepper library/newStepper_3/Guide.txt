@@ -1,6 +1,0 @@
-Libreria per driver 2 ponti H
-Passo intero
-No pwm
-Funzioni:
-	speed
-	step
