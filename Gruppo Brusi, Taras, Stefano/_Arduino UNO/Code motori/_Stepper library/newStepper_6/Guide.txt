@@ -1,6 +1,0 @@
-Libreria per driver L298N
-Passo intero
-No pwm
-Funzioni:
-	speed
-	step
