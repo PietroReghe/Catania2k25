@@ -77,7 +77,7 @@ if __name__ == '__main__':
             
             ser.write(TRIAL_BEGIN)
             if car_color == "REDCAR" and car_holder.count_red() < 2:    
-                steps+1
+                steps + 1
                 ser.write (PICK_UP)
                 car_holder.add(RED_CAR)
                 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             else :
 
                 if car_color == "BLUECAR" and car_holder.count_blue() < 4:
-                    steps +1
+                    steps + 1
                     ser.write (PICK_UP)
                     car_holder.add(BLUE_CAR)
                     
@@ -113,14 +113,17 @@ if __name__ == '__main__':
         if line == ("PickedUp") and steps <= 18:
             ser.write(TRIAL_BEGIN)
         else:
-            if steps == 8 :
+            if steps == 9 :
                 ser.write(b"ROTATE\n")
+        
+       
+        
             
         if car_color == "YELLOWCAR":
-            steps+1
+            steps + 1
         else:
             if car_color == "GREENCAR":
-                steps+1
+                steps + 1
 
          
         if line == "DROPREDEND":
@@ -128,8 +131,7 @@ if __name__ == '__main__':
 
 
 
-#e che quando il raspi dice di fermarsi lui si fermi veramnte nel punto dato
-# devi fare in modo che ogni volta che si stoppa a prendere un colore riprenda a fare il giro in modo corretto
+# Contraddizione tra fermarsi per prendere e nadare avanti
 
 
 
