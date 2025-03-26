@@ -15,4 +15,5 @@ if __name__ == '__main__':
 def send_command(command:str)->str:
     ser.write(command)
     line = ser.readline().decode('utf-8').rstrip()
+    print("Output for command", command, line)
     return line
