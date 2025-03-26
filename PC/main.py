@@ -57,12 +57,9 @@ def read_station_color():
     line = send_command(START_COMMAND)
     #camera on
     station_color = read_color()
-    if station_color == "YELLOWCAR":
-                officina == "YELLOW" 
-                send_command(YELLOW)     
-    elif station_color == "GREENCAR" :
-        officina == "GREEN"
-        send_command(GREEN)
+    officina = station_color           
+    send_command(officina)     
+    
     
 
 
@@ -70,10 +67,11 @@ def read_station_color():
 def round_one():
     if line == "START_END":
         line = send_command(ALLIGNE_COMMAND)
-    if line == "ALLIGNE_END":
-        line = send_command(TRIAL_BEGIN)
+    while line != "ALLIGNE_END":
+        time.sleep(1)
+    line = send_command(TRIAL_BEGIN)
         # camera on
-        trial_steps = 1
+    trial_steps = 1
     while car_holder.count_red() < 2 and car_holder.count_blue() < 5 and trial_steps <= 18:
         car_color = read_color()
         if car_color == "BLUECAR":
@@ -82,10 +80,11 @@ def round_one():
         elif car_color == "REDCAR" and car_holder.count_red() < 2:
             line = send_command(PICK_UP)
             car_holder.add(RED_CAR)
-        elif line == "Picked_Up" and trial_steps <= 18:
-            line = send_command(TRIAL_BEGIN)
-        line = send_command(TRIAL_BEGIN)# per poter andare avndi deve aspettare che l'arduino dia la line Picked_Up
-        check_trial_steps(trial_steps)# gli step me li controlla ogni volta e aggiunge +1 ogni volta che chiamo questa funzione?
+        while line != "Picked_Up" and trial_steps <= 18:
+           time.sleep(1)
+        check_trial_steps(trial_steps)
+        line = send_command(TRIAL_BEGIN)
+
 
 
 def check_trial_steps(trial_steps):
@@ -104,18 +103,17 @@ def round_two():
     trial_steps = 1
     if line == "DropBlueEnd" : 
             line = send_command(ALLIGNE_2)
-            line = send_command(TRIAL_BEGIN)
-            #camera on
+    while line != "ALLIGNE_2_END":
+        time.sleep(1)
     while  car_holder.count_red() < 5 and trial_steps <= 18:
         car_color = read_color()
         if car_color == "REDCAR" and car_holder.count_red() < 5:
             line = send_command(PICK_UP)
             car_holder.add(RED_CAR)
-        elif line == "Picked_Up" and trial_steps <= 18:
-            line = send_command(TRIAL_BEGIN)
-        line = send_command(TRIAL_BEGIN)
+        while line != "Picked_Up" and trial_steps <= 18:
+           time.sleep(1)
         check_trial_steps(trial_steps)
-
+        line = send_command(TRIAL_BEGIN)
 
     
     
@@ -170,8 +168,8 @@ if __name__ == '__main__':
         
 
 
-# Contraddizione tra fermarsi per prendere e nadare avanti
-#Carcolor yello e green step+1
+
+
 #colori_bot a quanto pare funziona
 
 
