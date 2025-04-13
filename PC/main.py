@@ -1,31 +1,17 @@
  # camera.py
-from CameraPI import read_camera_pi
-from SerialBusRaspberry_send_and_receive import send_command, ser
-from CameraPI import cv2
+
+from provaseriale import TestSerial
+from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
 import serial
-
+from commands import *
 
 steps = 0; range(1,18)
 
 
 officina = "Undefined"
 
-START_COMMAND = b"START\n"
-BLUE_CAR = b"BLUECAR\n"
-RED_CAR = b"REDCAR\n"
-ALLIGNE_COMMAND = b"ALLIGNE\n"
-TRIAL_BEGIN = b"TRIALBEGIN\n"
-STOP_COMMAND = b"STOP\n"
-PICK_UP = b"PickUp\n"
-DROP_BLUE = b"DropBlue\n"
-ALLIGNE_2 = b"ALLIGNE2\n"
-DROP_RED = b"DROPRED\n"
-RESET_COMMAND = b"RESET\n"
-PICKED_UP = b"PickedUp\n"
-ROTATE = b"ROTATE\n"
-GREEN = b"GREEN\n"
-YELLOW = b"YELLOW\n"
+
 
 
 
@@ -53,6 +39,10 @@ car_holder = CarHolder()
 def read_color():
     pass
 
+def send_command(command:str) -> None:
+    serial_send(command,ser)
+
+
 def read_station_color():
     line = send_command(START_COMMAND)
     #camera on
@@ -65,7 +55,7 @@ def read_station_color():
 
 
 def round_one():
-    if line == "START_END":
+    if line == START_END:
         line = send_command(ALLIGNE_COMMAND)
     while line != "ALLIGNE_END":
         time.sleep(1)
@@ -134,27 +124,33 @@ def reset ():
            line = send_command(RESET_COMMAND)
 
 
-
+global ser
 
 if __name__ == '__main__':
-    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    #ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    ser = TestSerial()
     ser.reset_input_buffer()
-   
     while True:
-        read_station_color()
-        time.sleep(2)
-        round_one()
-        time.sleep(2)
-        deliver_blues()
-        time.sleep(2)
-        round_two()
-        time.sleep(2)
-        deliver_red()
-        time.sleep(2)
-        reset()
-        time.sleep(2)
-       
         
+        line = ser.readline().decode('utf-8').rstrip()
+        print("input", line, '\n')
+        time.sleep(1)
+
+        while True:
+            read_station_color()
+            time.sleep(2)
+            round_one()
+            time.sleep(2)
+            deliver_blues()
+            time.sleep(2)
+            round_two()
+            time.sleep(2)
+            deliver_red()
+            time.sleep(2)
+            reset()
+            time.sleep(2)
+        
+            
         
         
         

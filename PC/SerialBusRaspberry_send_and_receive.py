@@ -12,7 +12,7 @@ if __name__ == '__main__':
     time.sleep(1)
 
 
-def send_command(command:str)->str:
+def send_command(command:str, ser)->str:
     ser.write(command)
     line = ser.readline().decode('utf-8').rstrip()
     print("Output for command", command, line)

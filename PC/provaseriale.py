@@ -5,7 +5,39 @@
 from os import link
 import serial
 import time
+from commands import *
 
+class TestSerial():
+    def readline(self)-> str:
+        next_r:str = ""+self.status["next response"]
+        self.status["next response"]  = ""
+        return next_r.encode()
+    
+    def write(self, command:str):
+        if command == START_COMMAND:
+            self.status["posizione"]= self.status["posizione"]+1000
+            self.status["next response"]= START_END
+
+    def reset_input_buffer(self):
+        print("Reset ;-) ")
+    
+
+
+    def __init__(self):
+        self.status = {
+            "posizione": 0,
+            "next response":""
+        }
+
+
+    
+
+def TRY_SERIAL(ser, line):
+    if line == "Hello from Arduino!" :
+        ser.write (b"START\n")
+    else :
+        if line == "Ready to work?":
+            ser.write(b"YESS\n")
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
@@ -16,11 +48,7 @@ if __name__ == '__main__':
         print("input", line, '\n')
         time.sleep(1)
 
-        if line == "Hello from Arduino!" :
-            ser.write (b"HELLO ARDUINO!\n")
-        else :
-            if line == "Ready to work?":
-                ser.write(b"YESS\n")
+        TRY_SERIAL(ser, line)
     
     
         
