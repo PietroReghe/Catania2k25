@@ -18,6 +18,11 @@ class TestSerial():
             self.status["posizione"]= self.status["posizione"]+1000
             self.status["next response"]= START_END
 
+    def write(self, command:str):
+        if command == ALLIGNE_COMMAND:
+            self.status["posizione"]= self.status["posizione"]+2000
+            self.status["next response"]= ALLIGNE_END
+
     def reset_input_buffer(self):
         print("Reset ;-) ")
     

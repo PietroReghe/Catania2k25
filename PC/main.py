@@ -5,6 +5,7 @@ from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
 import serial
 from commands import *
+from camera import read_from_camera
 
 steps = 0; range(1,18)
 
@@ -45,7 +46,7 @@ def send_command(command:str) -> None:
 
 def read_station_color():
     line = send_command(START_COMMAND)
-    #camera on
+    read_from_camera()
     station_color = read_color()
     officina = station_color           
     send_command(officina)     
@@ -57,20 +58,16 @@ def read_station_color():
 def round_one():
     if line == START_END:
         line = send_command(ALLIGNE_COMMAND)
-    while line != "ALLIGNE_END":
+    while line != ALLIGNE_END:
         time.sleep(1)
     line = send_command(TRIAL_BEGIN)
-        # camera on
     trial_steps = 1
-    while car_holder.count_red() < 2 and car_holder.count_blue() < 5 and trial_steps <= 18:
-        car_color = read_color()
+    while car_holder.count_blue() < 5 and trial_steps <= 18:
+        car_color = read_from_camera()
         if car_color == "BLUECAR":
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
-        elif car_color == "REDCAR" and car_holder.count_red() < 2:
-            line = send_command(PICK_UP)
-            car_holder.add(RED_CAR)
-        while line != "Picked_Up" and trial_steps <= 18:
+        while line !=  PICKED_UP and trial_steps <= 18:
            time.sleep(1)
         check_trial_steps(trial_steps)
         line = send_command(TRIAL_BEGIN)
@@ -93,14 +90,14 @@ def round_two():
     trial_steps = 1
     if line == "DropBlueEnd" : 
             line = send_command(ALLIGNE_2)
-    while line != "ALLIGNE_2_END":
+    while line != ALIIGNE_2_END:
         time.sleep(1)
     while  car_holder.count_red() < 5 and trial_steps <= 18:
         car_color = read_color()
         if car_color == "REDCAR" and car_holder.count_red() < 5:
             line = send_command(PICK_UP)
             car_holder.add(RED_CAR)
-        while line != "Picked_Up" and trial_steps <= 18:
+        while line != PICKED_UP and trial_steps <= 18:
            time.sleep(1)
         check_trial_steps(trial_steps)
         line = send_command(TRIAL_BEGIN)
@@ -109,7 +106,7 @@ def round_two():
     
 
 def deliver_blues():
-    if car_holder.count_blue() == 4 and car_holder.count_red() == 2:
+    if car_holder.count_blue() == 4 :
         send_command(STOP_COMMAND)
         line = send_command(DROP_BLUE)
 
@@ -120,7 +117,7 @@ def deliver_red():
         line = send_command(DROP_RED)
 
 def reset ():
-     if line == "DROPRED_END":
+     if line == DROP_END:
            line = send_command(RESET_COMMAND)
 
 
@@ -142,10 +139,6 @@ if __name__ == '__main__':
             round_one()
             time.sleep(2)
             deliver_blues()
-            time.sleep(2)
-            round_two()
-            time.sleep(2)
-            deliver_red()
             time.sleep(2)
             reset()
             time.sleep(2)

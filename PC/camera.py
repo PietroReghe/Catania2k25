@@ -1,64 +1,77 @@
-import cv2
+from picamera2 import Picamera2
+from time import sleep
+import numpy as np 
+import cv2 
 
+path0 = '/home/pi/Desktop/Raspberry/Catania_2025/image0.jpg'  # Percorso in cui salvare la foto
+path1 = '/home/pi/Desktop/Raspberry/Catania_2025/image1.jpg'  # Percorso in cui salvare la foto
 
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-thing = "Undefined"
+color = "Undefined"
+mean_color = [0, 0, 0]
 
-def read_from_camera():
+camera = Picamera2()
+camera_config = camera.create_still_configuration({"size": (1920, 1080)})  # Risoluzionw 1920x1080
+camera.configure(camera_config)
 
-    while True:
-                _, frame1 = cap.read()
-                frame2 = cv2.flip(frame1, 1)
-                frame = cv2.convertScaleAbs(frame2, 1, 1)
-                hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                height, width, _ = frame.shape
-                
-                #center
-                cx = int (width /2)
-                cy = int (height / 2)
-                
-                #pick pixel value
-                pixel_center = hsv_frame[cy, cx]
-                hue_value = pixel_center[0]
-                sat_value = pixel_center[1]
-                thing_value = pixel_center[2]
-                
-                #define colors
-                
-                
-                if thing_value < 50:
-                    thing = "VOID"
-                elif sat_value < 30:
-                    thing = "PARETE"
-                    
-                else:
-                    if hue_value > 145 or hue_value < 5:
-                        if sat_value > 180:
-                            thing = "REDCAR"   
-                        else:
-                            thing = "OSTACOLO"
-                    elif hue_value < 45:
-                        thing = "YELLOWCAR"
-                        
-                    elif hue_value < 90:
-                        thing = "GREENCAR"
-                        
-                    else:
-                        thing = "BLUECAR"
-                        
-                    
-                
-                pixel_center_bgr = frame[cy, cx]
-                b, g, r =int(pixel_center_bgr[0]), int(pixel_center_bgr[1]), int(pixel_center_bgr[2])
-                cv2.putText(frame, thing, (20, 70), 0, 2, (0, 255, 0), 4) #where, what, position, font, width, size, colour, width
-                cv2.circle(frame, (cx, cy), 0, (0, 255, 0), 12) #where, position, diameter, colour, width
-                
-                #end of loop
-                cv2.imshow("Frame", frame)
-                key = cv2.waitKey(1)
-                if key == 27:
-                    break  
-    cap.release()
-    cv2.destroyAllWindows()     
+def read_from_camera(img0, img1):
+   
+   global color  # Aggiunto per aggiornare la variabile globale color
+   
+   img0 = cv2.convertScaleAbs(img0, 1, 1) 
+   img1 = cv2.convertScaleAbs(img1, 1, 1) 
+   
+   hsv_frame0 = cv2.cvtColor(img0, cv2.COLOR_BGR2HSV)
+   hsv_frame1 = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
+   
+   height, width, _ = img0.shape
+
+   # Coordinate del centro
+   cx = int(width / 2)
+   cy = int(height / 2)
+
+   # Definire una regione 100x100 attorno al centro
+   roi_size = 50  # Metà dimensione della ROI
+   roi0 = hsv_frame0[cy - roi_size:cy + roi_size, cx - roi_size:cx + roi_size]
+   roi1 = hsv_frame1[cy - roi_size:cy + roi_size, cx - roi_size:cx + roi_size]
+
+   # Calcolare il colore medio nella ROI
+   mean_color0 = cv2.mean(roi0)[:3]  # Ignorare il canale alpha
+   mean_color1 = cv2.mean(roi1)[:3]
+   
+   for i in range (0,3,+1):
+      mean_color[i] = (mean_color0[i] + mean_color1[i]) / 2
+   
+   hue_value = int(mean_color[0])
+   sat_value = int(mean_color[1])
+   value_value = int(mean_color[2])
+
+   if hue_value < 10 or hue_value > 135:
+      color = "RED"
+   elif hue_value < 58:
+      color = "YELLOW"
+   elif hue_value < 93:
+      color = "GREEN"
+   elif hue_value < 135:
+      color = "BLUECAR"
+         
+   print(hue_value, sat_value, value_value)
+   
+
+while True:
+      
+      camera.start()              # Avvia la fotocamera
+      sleep(2)                  # Attendi che la fotocamera si avvii
+      
+      camera.capture_file(path0)  # Salva l'immagine nella cartella
+      sleep(0.1)
+      camera.capture_file(path1)  # Salva l'immagine nella cartella
+      
+      camera.stop()               # Ferma la fotocamera
+      
+      img0 = cv2.imread(path0)    # Leggi l'immagine salvata
+      img1 = cv2.imread(path1)
+
+      read_from_camera(img0, img1)      # Ricava colore e fai la media delle immagini
+      print(color)
+
+      sleep(0.5)
