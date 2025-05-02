@@ -1,4 +1,6 @@
+from PC.commands import BLUE_CAR, GREEN, RED_CAR, YELLOW
 from picamera2 import Picamera2
+from typing import List
 from time import sleep
 import numpy as np 
 import cv2 
@@ -6,16 +8,14 @@ import cv2
 path0 = '/home/pi/Desktop/Raspberry/Catania_2025/image0.jpg'  # Percorso in cui salvare la foto
 path1 = '/home/pi/Desktop/Raspberry/Catania_2025/image1.jpg'  # Percorso in cui salvare la foto
 
-color = "Undefined"
+
 mean_color = [0, 0, 0]
 
 camera = Picamera2()
 camera_config = camera.create_still_configuration({"size": (1920, 1080)})  # Risoluzionw 1920x1080
 camera.configure(camera_config)
 
-def read_from_camera(img0, img1):
-   
-   global color  # Aggiunto per aggiornare la variabile globale color
+def read_color_from_img(img0, img1):
    
    img0 = cv2.convertScaleAbs(img0, 1, 1) 
    img1 = cv2.convertScaleAbs(img1, 1, 1) 
@@ -46,32 +46,42 @@ def read_from_camera(img0, img1):
    value_value = int(mean_color[2])
 
    if hue_value < 10 or hue_value > 135:
-      color = "RED"
+      color = RED_CAR
    elif hue_value < 58:
-      color = "YELLOW"
+      color = YELLOW
    elif hue_value < 93:
-      color = "GREEN"
+      color =  GREEN
    elif hue_value < 135:
-      color = "BLUECAR"
+      color = BLUE_CAR
+   else:
+      color = None
          
    print(hue_value, sat_value, value_value)
+   return color
    
+def read_from_camera() -> str | None:
 
-while True:
-      
-      camera.start()              # Avvia la fotocamera
-      sleep(2)                  # Attendi che la fotocamera si avvii
-      
-      camera.capture_file(path0)  # Salva l'immagine nella cartella
-      sleep(0.1)
-      camera.capture_file(path1)  # Salva l'immagine nella cartella
-      
-      camera.stop()               # Ferma la fotocamera
-      
-      img0 = cv2.imread(path0)    # Leggi l'immagine salvata
-      img1 = cv2.imread(path1)
 
-      read_from_camera(img0, img1)      # Ricava colore e fai la media delle immagini
-      print(color)
+   # Inizializza la fotocamera
+   camera.start_preview()
+   sleep(2)  # Attendi che la fotocamera si avvii
 
-      sleep(0.5)
+   # Cattura un'immagine di prova
+   while True:
+         
+         camera.start()              # Avvia la fotocamera
+         sleep(2)                  # Attendi che la fotocamera si avvii
+         
+         camera.capture_file(path0)  # Salva l'immagine nella cartella
+         sleep(0.1)
+         camera.capture_file(path1)  # Salva l'immagine nella cartella
+         
+         camera.stop()               # Ferma la fotocamera
+         
+         img0 = cv2.imread(path0)    # Leggi l'immagine salvata
+         img1 = cv2.imread(path1)
+
+         color = read_color_from_img(img0, img1)      # Ricava colore e fai la media delle immagini
+         print(color)
+         return color
+

@@ -3,18 +3,14 @@
 from provaseriale import TestSerial
 from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
-import serial
+from test_serial import TestSerial
 from commands import *
 from camera import read_from_camera
 
 steps = 0; range(1,18)
 
 
-officina = "Undefined"
-
-
-
-
+officina : str| None =  None
 
 class CarHolder:  
     seats = []
@@ -37,8 +33,13 @@ class CarHolder:
 
 car_holder = CarHolder()  
 
-def read_color():
-    pass
+def read_color() -> str:
+    color = read_from_camera()
+    if not color:
+        print("!NO COLOR!")
+        return "NO_COLOR"
+    return color
+    
 
 def send_command(command:str) -> None:
     serial_send(command,ser)
@@ -52,8 +53,6 @@ def read_station_color():
     send_command(officina)     
     
     
-
-
 
 def round_one():
     if line == START_END:
@@ -102,8 +101,6 @@ def round_two():
         check_trial_steps(trial_steps)
         line = send_command(TRIAL_BEGIN)
 
-    
-    
 
 def deliver_blues():
     if car_holder.count_blue() == 4 :
