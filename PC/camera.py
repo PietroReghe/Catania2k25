@@ -62,10 +62,6 @@ def read_color_from_img(img0, img1):
 def read_from_camera() -> str | None:
 
 
-   # Inizializza la fotocamera
-   camera.start_preview()
-   sleep(2)  # Attendi che la fotocamera si avvii
-
    # Cattura un'immagine di prova
    while True:
          
