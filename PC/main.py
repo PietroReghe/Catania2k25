@@ -9,7 +9,6 @@ from camera import read_from_camera
 
 steps = 0; range(1,18)
 
-
 officina : str| None =  None
 
 class CarHolder:  
@@ -63,7 +62,7 @@ def round_one():
     trial_steps = 1
     while car_holder.count_blue() < 5 and trial_steps <= 18:
         car_color = read_from_camera()
-        if car_color == "BLUECAR":
+        if car_color == BLUE_CAR:
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
         while line !=  PICKED_UP and trial_steps <= 18:
@@ -78,12 +77,6 @@ def check_trial_steps(trial_steps):
     if trial_steps == 9:
         line = send_command(ROTATE)
 
-        
-        
-        
-    
-
-
 
 def round_two():
     trial_steps = 1
@@ -93,7 +86,7 @@ def round_two():
         time.sleep(1)
     while  car_holder.count_red() < 5 and trial_steps <= 18:
         car_color = read_color()
-        if car_color == "REDCAR" and car_holder.count_red() < 5:
+        if car_color == RED_CAR and car_holder.count_red() < 5:
             line = send_command(PICK_UP)
             car_holder.add(RED_CAR)
         while line != PICKED_UP and trial_steps <= 18:
