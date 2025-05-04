@@ -20,7 +20,6 @@ class TestSerial():
         print("Reset ;-) ")
     
 
-
     def __init__(self):
         self.status = {
             "posizione": 0,

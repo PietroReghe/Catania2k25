@@ -46,7 +46,6 @@ def send_command(command:str) -> None:
 
 def read_station_color():
     line = send_command(START_COMMAND)
-    read_from_camera()
     station_color = read_color()
     officina = station_color           
     send_command(officina)     
@@ -61,7 +60,7 @@ def round_one():
     line = send_command(TRIAL_BEGIN)
     trial_steps = 1
     while car_holder.count_blue() < 5 and trial_steps <= 18:
-        car_color = read_from_camera()
+        car_color = read_color()
         if car_color == BLUE_CAR:
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
