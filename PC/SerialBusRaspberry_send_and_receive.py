@@ -15,5 +15,10 @@ if __name__ == '__main__':
 def send_command(command:str, ser)->str:
     ser.write(command)
     line = ser.readline().decode('utf-8').rstrip()
-    print("Output for command", command, line)
+    while line == "":
+        print("Waiting for response...")
+        time.sleep(0.1)
+        line = ser.readline().decode('utf-8').rstrip()
+
+    print("Output for command", command, "->" ,line)
     return line

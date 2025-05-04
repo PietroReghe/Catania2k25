@@ -6,7 +6,7 @@ import time
 import serial
 #from test_serial import TestSerial
 from commands import *
-#from camera import read_from_camera
+from camera import read_from_camera
 
 steps = 0; range(1,18)
 
@@ -34,27 +34,30 @@ class CarHolder:
 car_holder = CarHolder()  
 
 def read_color() -> str:
-    """color = read_from_camera()
+    color = read_from_camera()
     if not color:
         print("!NO COLOR!")
-        return "NO_COLOR"""
-    return BLUE_CAR
+        return "NO_COLOR"
+    return color
     
 
-def send_command(command:str) -> None:
-    serial_send(command,ser)
+def send_command(command:str) -> str:
+    return serial_send(command,ser)
 
 
-def read_station_color():
+def read_station_color() -> str:
+    print("Read station color")
     line = send_command(START_COMMAND)
     officina = read_color()
-              
-    send_command(officina)     
+    print("Station color", officina)
+    return send_command(officina)     
     
     
 
-def round_one():
-    if line == START_END:
+def round_one(station_status:str):
+    print("Round one", station_status)
+    line = ""
+    if station_status == START_END:
         line = send_command(ALLIGNE_COMMAND)
     while line != ALLIGNE_END:
         time.sleep(1)
@@ -124,9 +127,9 @@ if __name__ == '__main__':
         time.sleep(1)
 
         while True:
-            read_station_color()
+            station_status = read_station_color()
             time.sleep(2)
-            round_one()
+            round_one(station_status)
             time.sleep(2)
             deliver_blues()
             time.sleep(2)
