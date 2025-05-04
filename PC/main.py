@@ -3,6 +3,7 @@
 from provaseriale import TestSerial
 from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
+import serial
 from test_serial import TestSerial
 from commands import *
 from camera import read_from_camera
@@ -113,8 +114,8 @@ def reset ():
 global ser
 
 if __name__ == '__main__':
-    #ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-    ser = TestSerial()
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+    #ser = TestSerial()
     ser.reset_input_buffer()
     while True:
         
