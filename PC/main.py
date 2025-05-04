@@ -6,7 +6,7 @@ import time
 import serial
 from test_serial import TestSerial
 from commands import *
-from camera import read_from_camera
+#from camera import read_from_camera
 
 steps = 0; range(1,18)
 
@@ -34,11 +34,11 @@ class CarHolder:
 car_holder = CarHolder()  
 
 def read_color() -> str:
-    color = read_from_camera()
+    """color = read_from_camera()
     if not color:
         print("!NO COLOR!")
-        return "NO_COLOR"
-    return color
+        return "NO_COLOR"""
+    return BLUE_CAR
     
 
 def send_command(command:str) -> None:
