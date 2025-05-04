@@ -1,10 +1,10 @@
  # camera.py
 
-from provaseriale import TestSerial
+
 from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
 import serial
-from test_serial import TestSerial
+#from test_serial import TestSerial
 from commands import *
 #from camera import read_from_camera
 
@@ -47,8 +47,8 @@ def send_command(command:str) -> None:
 
 def read_station_color():
     line = send_command(START_COMMAND)
-    station_color = read_color()
-    officina = station_color           
+    officina = read_color()
+              
     send_command(officina)     
     
     
