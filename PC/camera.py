@@ -82,5 +82,3 @@ def read_from_camera() -> str | None:
         print("Colore finale: ",color)
         return color
 
-print("Camera ready")
-print(read_from_camera())
