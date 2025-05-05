@@ -63,12 +63,12 @@ def round_one(station_status:str):
         time.sleep(1)
     line = send_command(TRIAL_BEGIN)
     trial_steps = 1
-    while car_holder.count_blue() < 5 and trial_steps <= 18:
+    while car_holder.count_blue() < 5 and trial_steps <= 9:
         car_color = read_color()
         if car_color == BLUE_CAR:
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
-        while line !=  PICKED_UP and trial_steps <= 18:
+        while line !=  PICKED_UP and trial_steps <= 9:
            time.sleep(1)
         check_trial_steps(trial_steps)
         line = send_command(TRIAL_BEGIN)
@@ -81,25 +81,29 @@ def check_trial_steps(trial_steps):
         line = send_command(ROTATE)
 
 
-def round_two():
-    trial_steps = 1
-    if line == "DropBlueEnd" : 
-            line = send_command(ALLIGNE_2)
-    while line != ALIIGNE_2_END:
+def round_two(station_status:str):
+    print("Round two", station_status)
+    line = ""
+    while line != ROTATE_END:
         time.sleep(1)
-    while  car_holder.count_red() < 5 and trial_steps <= 18:
+    line = send_command(TRIAL_BEGIN)
+    trial_steps = 1
+    while car_holder.count_blue() < 5 and 9 <= trial_steps <= 18:
         car_color = read_color()
-        if car_color == RED_CAR and car_holder.count_red() < 5:
-            line = send_command(PICK_UP)
-            car_holder.add(RED_CAR)
-        while line != PICKED_UP and trial_steps <= 18:
-           time.sleep(1)
-        check_trial_steps(trial_steps)
-        line = send_command(TRIAL_BEGIN)
+    if car_color == BLUE_CAR:
+        line = send_command(PICK_UP)
+        car_holder.add(BLUE_CAR)
+        while line != PICKED_UP and 9 <= trial_steps <= 18:
+            time.sleep(1)
+    check_trial_steps(trial_steps)
+    line = send_command(TRIAL_BEGIN)
 
+    
 
 def deliver_blues():
-    if car_holder.count_blue() == 4 :
+    print("Deliver blu at", station_status)
+    line = ""
+    if car_holder.count_blue() == 4 : 
         line = send_command(STOP_COMMAND)
         line = send_command(DROP_BLUE)
 
@@ -110,6 +114,8 @@ def deliver_red():
         line = send_command(DROP_RED)
 
 def reset ():
+     print ("Resetting")
+     line = ""
      if line == DROP_END:
            line = send_command(RESET_COMMAND)
 
@@ -130,6 +136,8 @@ if __name__ == '__main__':
             station_status = read_station_color()
             time.sleep(2)
             round_one(station_status)
+            time.sleep(2)
+            round_two(station_status)
             time.sleep(2)
             deliver_blues()
             time.sleep(2)
