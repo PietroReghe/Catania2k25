@@ -139,7 +139,7 @@ if __name__ == '__main__':
             time.sleep(2)
             round_two(station_status)
             time.sleep(2)
-            deliver_blues()
+            deliver_blues(station_status)
             time.sleep(2)
             reset()
             time.sleep(2)
