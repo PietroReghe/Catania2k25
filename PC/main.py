@@ -97,7 +97,7 @@ def round_two():
 
 def deliver_blues():
     if car_holder.count_blue() == 4 :
-        send_command(STOP_COMMAND)
+        line = send_command(STOP_COMMAND)
         line = send_command(DROP_BLUE)
 
 
