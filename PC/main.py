@@ -69,7 +69,7 @@ def demo(station_status:str) :
            print("prendo")
         line = send_command(TRIAL_BEGIN)
         print("no BLUECAR")
-    if car_holder.count_blue() == 4 : 
+    if car_holder.count_blue() == 2 : 
         line = send_command(STOP_COMMAND)
         
 
