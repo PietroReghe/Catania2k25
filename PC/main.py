@@ -54,9 +54,9 @@ def read_station_color() -> str:
     return send_command(officina)     
     
 def demo(station_status:str) :
-    print("demo")
+    print("demo", station_status)
     line = ""
-    if line == START_END:
+    if  station_status== START_END:
         line = send_command(TRIAL_BEGIN)
     while car_holder.count_blue() < 2:
         car_color = read_color()
@@ -78,7 +78,7 @@ def demo(station_status:str) :
 
 
 def round_one(station_status:str):
-    print("Round one", station_status)
+    print("demo", station_status)
     line = ""
     if station_status == START_END:
         line = send_command(ALLIGNE_COMMAND)
