@@ -53,7 +53,28 @@ def read_station_color() -> str:
     print("Station color", officina)
     return send_command(officina)     
     
-    
+def demo() -> str:
+    print("demo")
+    line = ""
+    if station_status == START_END:
+        line = send_command(TRIAL_BEGIN)
+    while car_holder.count_blue() < 2:
+        car_color = read_color()
+        if car_color == BLUE_CAR:
+            print("Bluecar spotted")
+            line = send_command(PICK_UP)
+            car_holder.add(BLUE_CAR)
+        while line !=  PICKED_UP:
+           time.sleep(1)
+        line = send_command(TRIAL_BEGIN)
+        print("no BLUECAR")
+    if car_holder.count_blue() == 4 : 
+        line = send_command(STOP_COMMAND)
+        line = send_command(DROP_BLUE)
+
+
+
+
 
 def round_one(station_status:str):
     print("Round one", station_status)
