@@ -48,6 +48,7 @@ def send_command(command:str) -> str:
 def read_station_color() -> str:
     print("Read station color")
     line = send_command(START_COMMAND)
+    time.sleep(2)
     officina = read_color()
     print("Station color", officina)
     return send_command(officina)     
