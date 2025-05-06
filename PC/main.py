@@ -59,6 +59,7 @@ def round_one(station_status:str):
     line = ""
     if station_status == START_END:
         line = send_command(ALLIGNE_COMMAND)
+        print("Mi allineo")
     while line != ALLIGNE_END:
         time.sleep(1)
     line = send_command(TRIAL_BEGIN)
@@ -66,12 +67,14 @@ def round_one(station_status:str):
     while car_holder.count_blue() < 5 and trial_steps <= 9:
         car_color = read_color()
         if car_color == BLUE_CAR:
+            print("Bluecar spotted")
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
         while line !=  PICKED_UP and trial_steps <= 9:
            time.sleep(1)
         check_trial_steps(trial_steps)
         line = send_command(TRIAL_BEGIN)
+        print("no BLUECAR")
 
 
 
@@ -91,12 +94,14 @@ def round_two(station_status:str):
     while car_holder.count_blue() < 5 and 9 <= trial_steps <= 18:
         car_color = read_color()
     if car_color == BLUE_CAR:
+        print("Bluecar spotted")
         line = send_command(PICK_UP)
         car_holder.add(BLUE_CAR)
         while line != PICKED_UP and 9 <= trial_steps <= 18:
             time.sleep(1)
     check_trial_steps(trial_steps)
     line = send_command(TRIAL_BEGIN)
+    print("no BLUECAR")
 
     
 
