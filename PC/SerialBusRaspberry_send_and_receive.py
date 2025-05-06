@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
 
 def send_command(command:str, ser)->str:
+    ser.reset_input_buffer()
     ser.write(command)
     line = ser.readline().decode('utf-8').rstrip()
     while line == "":

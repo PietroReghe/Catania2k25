@@ -56,20 +56,23 @@ def read_station_color() -> str:
 def demo(station_status:str) :
     print("demo", station_status)
     line = ""
-    if  station_status== START_END:
+    if  station_status:
+        print("demo",TRIAL_BEGIN,  station_status)
         line = send_command(TRIAL_BEGIN)
-    while car_holder.count_blue() < 2:
+        print("vado avanti...")
+    while car_holder.count_blue() < 4:
+        print("looking for blue car")
         car_color = read_color()
+        print(car_color)
         if car_color == BLUE_CAR:
             print("Bluecar spotted")
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
-        while line !=  PICKED_UP:
-           time.sleep(1)
-           print("prendo")
+        else:
+            print("no BLUECAR")
         line = send_command(TRIAL_BEGIN)
-        print("no BLUECAR")
-    if car_holder.count_blue() == 2 : 
+        print("looking for NEXT blue car")
+    if car_holder.count_blue() == 4 : 
         line = send_command(STOP_COMMAND)
         
 
@@ -77,54 +80,65 @@ def demo(station_status:str) :
 
 
 
-def round_one(station_status:str):
-    print("demo", station_status)
+def round_one(station_status:str) :
+    print("Round_one", station_status)
     line = ""
-    if station_status == START_END:
+    if  station_status:
+        trial_steps = 1
+        print("Round_one",ALLIGNE_COMMAND,  station_status)
         line = send_command(ALLIGNE_COMMAND)
         print("Mi allineo")
-    while line != ALLIGNE_END:
-        time.sleep(1)
-    line = send_command(TRIAL_BEGIN)
-    trial_steps = 1
-    while car_holder.count_blue() < 5 and trial_steps <= 9:
+    while car_holder.count_blue() < 4 and trial_steps <= 9:
+        print("looking for blue car", trial_steps)
         car_color = read_color()
+        print(car_color)
         if car_color == BLUE_CAR:
             print("Bluecar spotted")
+            trial_steps = check_trial_steps(trial_steps)
             line = send_command(PICK_UP)
             car_holder.add(BLUE_CAR)
-        while line !=  PICKED_UP and trial_steps <= 9:
-           time.sleep(1)
-        check_trial_steps(trial_steps)
+        else:
+            trial_steps = check_trial_steps(trial_steps)
+            print("no BLUECAR")
         line = send_command(TRIAL_BEGIN)
-        print("no BLUECAR")
+        print("looking for NEXT blue car")
+    line = send_command(ROTATE)
+    
+    
+
+        
+       
 
 
 
 def check_trial_steps(trial_steps):
     trial_steps = trial_steps + 1
-    if trial_steps == 9:
-        line = send_command(ROTATE)
+    return trial_steps
 
 
 def round_two(station_status:str):
-    print("Round two", station_status)
+    trial_steps = 10
+    print("Round_two", station_status)
     line = ""
-    while line != ROTATE_END:
-        time.sleep(1)
-    line = send_command(TRIAL_BEGIN)
-    trial_steps = 1
-    while car_holder.count_blue() < 5 and 9 <= trial_steps <= 18:
+    if  station_status:
+        print("Round_two",TRIAL_BEGIN,  station_status)
+        line = send_command(TRIAL_BEGIN)
+        print("Mi muovo")
+    while car_holder.count_blue() < 4 and trial_steps <= 18:
+        print("looking for blue car", trial_steps)
         car_color = read_color()
-    if car_color == BLUE_CAR:
-        print("Bluecar spotted")
-        line = send_command(PICK_UP)
-        car_holder.add(BLUE_CAR)
-        while line != PICKED_UP and 9 <= trial_steps <= 18:
-            time.sleep(1)
-    check_trial_steps(trial_steps)
-    line = send_command(TRIAL_BEGIN)
-    print("no BLUECAR")
+        print(car_color)
+        if car_color == BLUE_CAR:
+            print("Bluecar spotted")
+            trial_steps = check_trial_steps(trial_steps)
+            line = send_command(PICK_UP)
+            car_holder.add(BLUE_CAR)
+        else:
+            trial_steps = check_trial_steps(trial_steps)
+            print("no BLUECAR")
+        line = send_command(TRIAL_BEGIN)
+        print("looking for NEXT blue car")
+    
 
     
 
@@ -162,18 +176,15 @@ if __name__ == '__main__':
 
         while True:
             station_status = read_station_color()
-            time.sleep(2)
-            demo(station_status)
-            ##round_one(station_status)
-            ##time.sleep(2)
-            ##round_two(station_status)
-            ##time.sleep(2)
-            ##deliver_blues(station_status)
-            ##time.sleep(2)
-            ##reset()
-            ##time.sleep(2)
+            time.sleep(1)
+            round_one(station_status)
+            time.sleep(1)
+            round_two(station_status)
         
+            #demo(station_status)
             
+        
+            #se ho già raccolto 4 blu salto la lettura del colore e vado alla poszione di riferimento
         
         
         
