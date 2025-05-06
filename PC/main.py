@@ -66,6 +66,7 @@ def demo(station_status:str) :
             car_holder.add(BLUE_CAR)
         while line !=  PICKED_UP:
            time.sleep(1)
+           print("prendo")
         line = send_command(TRIAL_BEGIN)
         print("no BLUECAR")
     if car_holder.count_blue() == 4 : 
