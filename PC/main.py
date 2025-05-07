@@ -100,7 +100,7 @@ def round_one(station_status:str) :
         print("looking for NEXT blue car")
     line = send_command(ROTATE)
     time.sleep(0.2)
-    check_blues_early()
+
     
 
 
@@ -113,7 +113,7 @@ def round_two(station_status:str):
         line = send_command(TRIAL_BEGIN)
         print("Mi muovo")
     while car_holder.count_blue() < 4 and trial_steps <= 18:
-        print("looking for blue car", trial_steps)
+        print("looking for blue car", trial_steps,)
         car_color = read_color()
         print(car_color)
         if car_color == BLUE_CAR:
@@ -137,7 +137,6 @@ def check_blues_early(station_status: str, trial_steps):
         while trial_steps <= 18:
             line = send_command(TRIAL_BEGIN)
             trial_steps = check_trial_steps(trial_steps)
-        line = send_command(BLUES_EARLY)
         return True
     return False
        
@@ -189,20 +188,23 @@ if __name__ == '__main__':
 
             round_one(station_status)
             time.sleep(1)
+            
+            handled = check_blues_early(station_status, trial_steps = 9)
 
-            handled = check_blues_early(station_status)
-
-            if handled:
-                resetting_early(station_status)  
-            else:
+            if not handled:
                 round_two(station_status)
                 time.sleep(1)
 
-                deliver_blues(station_status)
-                time.sleep(1)
+            deliver_blues(station_status)
+            time.sleep(1)
 
-                reset(station_status)
-                time.sleep(1)
+            reset()
+            time.sleep(1)
+
+        
+                 
+            
+               
         
             #demo(station_status)
             
