@@ -74,10 +74,6 @@ def demo(station_status:str) :
         print("looking for NEXT blue car")
     if car_holder.count_blue() == 4 : 
         line = send_command(STOP_COMMAND)
-        
-
-
-
 
 
 def round_one(station_status:str) :
@@ -88,7 +84,7 @@ def round_one(station_status:str) :
         print("Round_one",ALLIGNE_COMMAND,  station_status)
         line = send_command(ALLIGNE_COMMAND)
         print("Mi allineo")
-    while car_holder.count_blue() < 4 and trial_steps <= 9:
+    while trial_steps <= 9:
         print("looking for blue car", trial_steps)
         car_color = read_color()
         print(car_color)
@@ -103,17 +99,9 @@ def round_one(station_status:str) :
         line = send_command(TRIAL_BEGIN)
         print("looking for NEXT blue car")
     line = send_command(ROTATE)
+    time.sleep(0.2)
+    check_blues_early()
     
-    
-
-        
-       
-
-
-
-def check_trial_steps(trial_steps):
-    trial_steps = trial_steps + 1
-    return trial_steps
 
 
 def round_two(station_status:str):
@@ -140,14 +128,29 @@ def round_two(station_status:str):
         print("looking for NEXT blue car")
     
 
+ 
+def check_blues_early(station_status: str, trial_steps):
     
-
-def deliver_blues():
-    print("Deliver blu at", station_status)
+    print("4 blues", station_status)
     line = ""
     if car_holder.count_blue() == 4 : 
-        line = send_command(STOP_COMMAND)
-        line = send_command(DROP_BLUE)
+        while trial_steps <= 18:
+            line = send_command(TRIAL_BEGIN)
+            trial_steps = check_trial_steps(trial_steps)
+        line = send_command(BLUES_EARLY)
+        return True
+    return False
+       
+def check_trial_steps(trial_steps):
+    trial_steps = trial_steps + 1
+    return trial_steps
+    
+
+def deliver_blues(station_status:str):
+    print("Deliver blu at", station_status)
+    line = "" 
+    line = send_command(STOP_COMMAND)
+    line = send_command(DROP_BLUE)
 
 
 def deliver_red():
@@ -155,11 +158,16 @@ def deliver_red():
         send_command(STOP_COMMAND)
         line = send_command(DROP_RED)
 
-def reset ():
+def reset():
      print ("Resetting")
      line = ""
      if line == DROP_END:
            line = send_command(RESET_COMMAND)
+
+def resetting_early():
+    print("Resetting Early")
+    line = ""
+    line = send_command(RESETTING_EARLY_SEND)
 
 
 global ser
@@ -175,11 +183,26 @@ if __name__ == '__main__':
         time.sleep(1)
 
         while True:
+
             station_status = read_station_color()
             time.sleep(1)
+
             round_one(station_status)
             time.sleep(1)
-            round_two(station_status)
+
+            handled = check_blues_early(station_status)
+
+            if handled:
+                resetting_early(station_status)  
+            else:
+                round_two(station_status)
+                time.sleep(1)
+
+                deliver_blues(station_status)
+                time.sleep(1)
+
+                reset(station_status)
+                time.sleep(1)
         
             #demo(station_status)
             
