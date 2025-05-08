@@ -112,7 +112,7 @@ def round_two(station_status:str):
         print("Round_two",TRIAL_BEGIN,  station_status)
         line = send_command(TRIAL_BEGIN)
         print("Mi muovo")
-    while car_holder.count_blue() < 4 and trial_steps <= 18:
+    while  trial_steps <= 18:
         print("looking for blue car", trial_steps,)
         car_color = read_color()
         print(car_color)
@@ -148,7 +148,7 @@ def check_trial_steps(trial_steps):
 def deliver_blues(station_status:str):
     print("Deliver blu at", station_status)
     line = "" 
-    line = send_command(STOP_COMMAND)
+
     line = send_command(DROP_BLUE)
 
 
@@ -201,16 +201,16 @@ if __name__ == '__main__':
             if not handled:
                 round_two(station_status)
                 time.sleep(1)
+                deliver_blues(station_status)
+                time.sleep(1)
+                THE_END()
+                time.sleep(100000000)
+
 
             deliver_blues(station_status)
-            
             time.sleep(1)
-
-            reset()
-
-            time.sleep(1)
-
             THE_END()
+            time.sleep(100000000)
 
         
                  
@@ -220,7 +220,7 @@ if __name__ == '__main__':
             #demo(station_status)
             
         
-            #se ho già raccolto 4 blu salto la lettura del colore e vado alla poszione di riferimento
+            
         
         
         
