@@ -162,12 +162,19 @@ def reset():
      line = ""
      if line == DROP_END:
            line = send_command(RESET_COMMAND)
+        
 
 def resetting_early():
     print("Resetting Early")
     line = ""
     line = send_command(RESETTING_EARLY_SEND)
 
+def THE_END():
+    print("THE END")
+    line = ""
+    if line == DONE:
+
+        time.sleep(19000000)
 
 global ser
 
@@ -196,10 +203,14 @@ if __name__ == '__main__':
                 time.sleep(1)
 
             deliver_blues(station_status)
+            
             time.sleep(1)
 
             reset()
+
             time.sleep(1)
+
+            THE_END()
 
         
                  
