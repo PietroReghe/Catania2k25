@@ -1,0 +1,39 @@
+Catania2k25 – Robotics Competition Project
+Catania2k25 is a robotics control project developed for a robotics competition by high school student Pietro Reghenzi from Liceo Scientifico Statale Copernico.
+
+This project uses a Raspberry Pi to control a robot via GPIO input, serial communication with an Arduino, and camera-based object detection. It includes state management, color recognition, and step-based logic to interact with physical components in a trial scenario.
+
+If you would like to contribute or collaborate, please contact Pietro Reghenzi at pietro.reghenzi.jr@gmail.com.
+
+📁 File Overview
+main.py
+This is the core control script for the robot.
+
+Connects to the Arduino over a serial connection.
+
+Coordinates a two-phase trial involving color detection and pickup tasks.
+
+Uses camera input to detect car colors (BLUE_CAR, RED_CAR).
+
+Controls logic through commands sent via serial, like TRIAL_BEGIN, PICK_UP, DROP_BLUE, etc.
+
+Contains logic for:
+
+Aligning the robot
+
+Detecting and picking up blue cars
+
+Dropping cars off at designated locations
+
+Resetting the system
+
+Implements multiple helper functions and a class CarHolder to manage collected car objects.
+
+button.py
+A utility script designed to launch the main control script when a physical switch (connected to GPIO17 on the Raspberry Pi) is turned ON.
+
+Monitors a lever (switch) state via GPIO.
+
+When switched ON, it activates a Python virtual environment and starts main.py.
+
+Prevents repeated launches by waiting until the switch is turned OFF.
