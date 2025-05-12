@@ -1,15 +1,13 @@
- # camera.py
-
+# camera.py
 
 from SerialBusRaspberry_send_and_receive import send_command as serial_send
 import time
 import serial
-#from test_serial import TestSerial
+# from test_serial import TestSerial
 from commands import *
 from camera import read_from_camera
 
 steps = 0; range(1,18)
-
 officina : str| None =  None
 
 class CarHolder:  
@@ -39,25 +37,24 @@ def read_color() -> str:
         print("!NO COLOR!")
         return "NO_COLOR"
     return color
-    
 
 def send_command(command:str) -> str:
     return serial_send(command,ser)
 
-
 def read_station_color() -> str:
+    time.sleep(3)
     print("Read station color")
     line = send_command(START_COMMAND)
     time.sleep(2)
     officina = read_color()
     print("Station color", officina)
-    return send_command(officina)     
-    
-def demo(station_status:str) :
+    return send_command(officina)
+
+def demo(station_status:str):
     print("demo", station_status)
     line = ""
-    if  station_status:
-        print("demo",TRIAL_BEGIN,  station_status)
+    if station_status:
+        print("demo", TRIAL_BEGIN, station_status)
         line = send_command(TRIAL_BEGIN)
         print("vado avanti...")
     while car_holder.count_blue() < 4:
@@ -72,16 +69,15 @@ def demo(station_status:str) :
             print("no BLUECAR")
         line = send_command(TRIAL_BEGIN)
         print("looking for NEXT blue car")
-    if car_holder.count_blue() == 4 : 
+    if car_holder.count_blue() == 4: 
         line = send_command(STOP_COMMAND)
 
-
-def round_one(station_status:str) :
+def round_one(station_status:str):
     print("Round_one", station_status)
     line = ""
-    if  station_status:
+    if station_status:
         trial_steps = 1
-        print("Round_one",ALLIGNE_COMMAND,  station_status)
+        print("Round_one", ALLIGNE_COMMAND, station_status)
         line = send_command(ALLIGNE_COMMAND)
         print("Mi allineo")
     while trial_steps <= 9:
@@ -101,19 +97,16 @@ def round_one(station_status:str) :
     line = send_command(ROTATE)
     time.sleep(0.2)
 
-    
-
-
 def round_two(station_status:str):
     trial_steps = 10
     print("Round_two", station_status)
     line = ""
-    if  station_status:
-        print("Round_two",TRIAL_BEGIN,  station_status)
+    if station_status:
+        print("Round_two", TRIAL_BEGIN, station_status)
         line = send_command(TRIAL_BEGIN)
         print("Mi muovo")
-    while  trial_steps <= 18:
-        print("looking for blue car", trial_steps,)
+    while trial_steps <= 18:
+        print("looking for blue car", trial_steps)
         car_color = read_color()
         print(car_color)
         if car_color == BLUE_CAR:
@@ -126,43 +119,36 @@ def round_two(station_status:str):
             print("no BLUECAR")
         line = send_command(TRIAL_BEGIN)
         print("looking for NEXT blue car")
-    
 
- 
 def check_blues_early(station_status: str, trial_steps):
-    
     print("4 blues", station_status)
     line = ""
-    if car_holder.count_blue() == 4 : 
+    if car_holder.count_blue() == 4: 
         while trial_steps <= 18:
             line = send_command(TRIAL_BEGIN)
             trial_steps = check_trial_steps(trial_steps)
         return True
     return False
-       
+
 def check_trial_steps(trial_steps):
     trial_steps = trial_steps + 1
     return trial_steps
-    
 
 def deliver_blues(station_status:str):
     print("Deliver blu at", station_status)
-    line = "" 
-
+    line = ""
     line = send_command(DROP_BLUE)
 
-
 def deliver_red():
-    if car_holder.count_red() == 5 :
+    if car_holder.count_red() == 5:
         send_command(STOP_COMMAND)
         line = send_command(DROP_RED)
 
 def reset():
-     print ("Resetting")
-     line = ""
-     if line == DROP_END:
-           line = send_command(RESET_COMMAND)
-        
+    print("Resetting")
+    line = ""
+    if line == DROP_END:
+        line = send_command(RESET_COMMAND)
 
 def resetting_early():
     print("Resetting Early")
@@ -173,7 +159,6 @@ def THE_END():
     print("THE END")
     line = ""
     if line == DONE:
-
         time.sleep(19000000)
 
 global ser
@@ -183,20 +168,18 @@ if __name__ == '__main__':
     #ser = TestSerial()
     ser.reset_input_buffer()
     while True:
-        
         line = ser.readline().decode('utf-8').rstrip()
         print("input", line, '\n')
         time.sleep(1)
 
         while True:
-
             station_status = read_station_color()
             time.sleep(1)
 
             round_one(station_status)
             time.sleep(1)
-            
-            handled = check_blues_early(station_status, trial_steps = 9)
+
+            handled = check_blues_early(station_status, trial_steps=9)
 
             if not handled:
                 round_two(station_status)
@@ -206,71 +189,7 @@ if __name__ == '__main__':
                 THE_END()
                 time.sleep(100000000)
 
-
             deliver_blues(station_status)
             time.sleep(1)
             THE_END()
             time.sleep(100000000)
-
-        
-                 
-            
-               
-        
-            #demo(station_status)
-            
-        
-            
-        
-        
-        
-        
-        
-        
-                 
-        
-
-         
-        
-
-
-
-
-#colori_bot a quanto pare funziona
-
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    
-        
-
-
-
-
-
-
-
-
-
-
-
-
-   
-    
-    
-

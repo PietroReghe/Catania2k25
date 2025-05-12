@@ -54,7 +54,7 @@ def read_color_from_img(img0, img1):
         color = RED_CAR
     elif hue_value < 58:
         color = YELLOW
-    elif hue_value < 93:
+    elif hue_value < 98:
         color = GREEN
     elif hue_value < 135:
         color = BLUE_CAR
@@ -81,4 +81,5 @@ def read_from_camera() -> str | None:
         color = read_color_from_img(img0, img1)
         print("Colore finale: ",color)
         return color
+
 

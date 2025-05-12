@@ -25,3 +25,6 @@ class TestSerial():
             "posizione": 0,
             "next response":""
         }
+
+
+        

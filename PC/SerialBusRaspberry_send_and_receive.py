@@ -23,3 +23,4 @@ def send_command(command:str, ser)->str:
 
     print("Output for command", command, "->" ,line)
     return line
+
